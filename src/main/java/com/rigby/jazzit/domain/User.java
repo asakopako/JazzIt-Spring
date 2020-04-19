@@ -14,14 +14,14 @@ import java.util.List;
 @Data
 public class User {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id                                                         // primary key
+    @GeneratedValue(strategy = GenerationType.IDENTITY)         // autoincrement
     private Long id;
 
     @NotNull @Email
     private String email;
 
-    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)      // este campo es ignorado al devolver la respuesta
     @NotNull @Min(4)
     private String password;
 
@@ -31,6 +31,14 @@ public class User {
     @JsonIgnore
     @ManyToMany
     private List<User> contacts = new ArrayList<>();
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "sender")                             // se hace una relacion bidireccional con la tabla message
+    private List<Message> senderMessages = new ArrayList<>();
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "receiver")
+    private List<Message> receiverMessages = new ArrayList<>();
 
     public void addContact(User user){
         contacts.add(user);

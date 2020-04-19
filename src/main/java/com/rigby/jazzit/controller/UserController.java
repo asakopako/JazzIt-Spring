@@ -20,13 +20,19 @@ public class UserController {
 
 
     @PostMapping("/api/users/register")
-    public ResponseEntity<User> postRegister(@Valid @RequestBody User user) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(userService.register(user));
+    public ResponseEntity<Void> postRegister(@Valid @RequestBody User user) {
+        userService.register(user);
+        return ResponseEntity.status(HttpStatus.CREATED).body(null);
     }
 
     @PostMapping("/api/users/login")
     public ResponseEntity<User> postLogin(@Valid @RequestBody LoginRequest loginRequest) {
         return ResponseEntity.status(HttpStatus.OK).body(userService.login(loginRequest.getEmail(), loginRequest.getPassword()));
+    }
+
+    @GetMapping("/api/users")
+    public ResponseEntity<List<User>> getUsers() {
+        return ResponseEntity.status(HttpStatus.OK).body(userService.findAll());
     }
 
     @GetMapping("/api/users/{userId}/contacts")

@@ -15,11 +15,11 @@ public class UserService {
     @Autowired UserRepository userRepository;
 
 
-    public User register(User user) {
+    public void register(User user) {
         if (userRepository.existsByEmail(user.getEmail())) {
             throw new BadRequestException("Email already exists");
         }
-        return userRepository.save(user);
+        userRepository.save(user);
     }
 
     public User login(String email, String password) {
@@ -37,14 +37,23 @@ public class UserService {
     }
 
     public void createContact(Long userId, String email) {
-        if(!userRepository.existsById(userId)) {
-            throw new NotFoundException("User id doesn't exist");
-        }
-        if(!userRepository.existsByEmail(email)) {
-            throw new NotFoundException("Email doesn't exist");
+        if(!userRepository.existsById(userId) || !userRepository.existsByEmail(email)) {
+            throw new NotFoundException("User id or email doesn't exist");
         }
         User user = userRepository.getOne(userId);
         user.addContact(userRepository.findByEmail(email));
         userRepository.save(user);
+    }
+
+    public List<User> findAll() {
+        return userRepository.findAll();
+    }
+
+    public User findById(Long id) {
+        return userRepository.getOne(id);
+    }
+
+    public boolean existsById(Long id) {
+        return userRepository.existsById(id);
     }
 }
