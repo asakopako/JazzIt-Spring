@@ -12,7 +12,7 @@ import java.util.List;
 @RestController
 public class MessageController {
 
-    @Autowired MessageService messageService;
+    @Autowired private MessageService messageService;
 
 
     @PostMapping("/public/users/{userId}/messages")

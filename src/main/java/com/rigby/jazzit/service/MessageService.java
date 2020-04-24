@@ -13,8 +13,8 @@ import java.util.List;
 @Transactional
 public class MessageService {
 
-    @Autowired MessageRepository messageRepository;
-    @Autowired UserService userService;
+    @Autowired private MessageRepository messageRepository;
+    @Autowired private UserService userService;
 
 
     public Message create(Long senderId, Long receiverId, String body) {

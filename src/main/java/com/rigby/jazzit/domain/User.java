@@ -18,7 +18,7 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)         // autoincrement
     private Long id;
 
-    @NotNull @Email
+    @NotNull @Email @Column(unique = true)
     private String email;
 
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)      // este campo es ignorado al devolver la respuesta
