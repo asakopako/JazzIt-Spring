@@ -7,12 +7,13 @@ import com.rigby.jazzit.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.net.ssl.SSLSession;
 import java.util.List;
 
 @Service
 public class UserService {
 
-    @Autowired UserRepository userRepository;
+    @Autowired private UserRepository userRepository;
 
 
     public void register(User user) {
@@ -50,10 +51,21 @@ public class UserService {
     }
 
     public User findById(Long id) {
-        return userRepository.getOne(id);
+        if (!userRepository.existsById(id)) {
+            throw new NotFoundException();
+        }
+        return userRepository.findById(id).get();
     }
 
     public boolean existsById(Long id) {
         return userRepository.existsById(id);
+    }
+
+    public boolean existsByEmail(String email) {
+        return userRepository.existsByEmail(email);
+    }
+
+    public User findByEmail(String email) {
+        return userRepository.findByEmail(email);
     }
 }

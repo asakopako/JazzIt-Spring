@@ -18,11 +18,11 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)         // autoincrement
     private Long id;
 
-    @NotNull @Email
+    @NotBlank @Email @Column(unique = true)
     private String email;
 
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)      // este campo es ignorado al devolver la respuesta
-    @NotNull @Min(4)
+    @NotBlank @Size(min = 4)
     private String password;
 
     @Past // "1986-07-11"

@@ -7,10 +7,10 @@ import javax.validation.constraints.*;
 @Data
 public class LoginRequest {
 
-    @NotNull @Email
+    @NotBlank @Email
     private String email;
 
-    @NotNull @Min(4)
+    @NotBlank @Size(min = 4)
     private String password;
 
 }

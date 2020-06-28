@@ -12,19 +12,19 @@ import java.util.List;
 @RestController
 public class MessageController {
 
-    @Autowired MessageService messageService;
+    @Autowired private MessageService messageService;
 
 
-    @PostMapping("/public/users/{userId}/messages")
+    @PostMapping("/api/users/{userId}/messages")
     public ResponseEntity<Message> postMessage(
             @PathVariable Long userId,
-            @RequestParam String body,
-            @RequestParam Long receiverId
+            @RequestParam Long receiverId,
+            @RequestParam String body
     ) {
         return ResponseEntity.status(HttpStatus.CREATED).body(messageService.create(userId, receiverId, body));
     }
 
-    @GetMapping("/public/users/{userId}/messages")
+    @GetMapping("/api/users/{userId}/messages")
     public ResponseEntity<List<Message>> getMessages(
             @PathVariable Long userId,
             @RequestParam Long receiverId
