@@ -1,14 +1,17 @@
 package com.rigby.jazzit.service.tool;
 
-import com.rigby.jazzit.config.exception.ForbiddenException;
-import com.rigby.jazzit.config.exception.NotFoundException;
-import com.rigby.jazzit.repository.UserRepository;
+import com.rigby.jazzit.config.exception.UnauthorizedException;
 import com.rigby.jazzit.service.UserService;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
+
+import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
+import java.util.regex.Matcher;
 
 @Component
 public class JwtTool {
@@ -16,8 +19,7 @@ public class JwtTool {
     private static final String SECRET = "PasswordCOMOV";
     private static final long EXPIRATION_TIME = 1000 * 60 * 60;
 
-    @Autowired private UserService userService; // no sé si esto puede ser static -> no se puede
-
+    @Autowired private UserService userService;
 
     public static String createToken(String email){
         return Jwts.builder()
@@ -38,10 +40,18 @@ public class JwtTool {
                     .setSigningKey(SECRET.getBytes())
                     .parseClaimsJws(token)
                     .getBody().getExpiration();
-//        System.out.println("CheckToken: " + email + " - " + expiration);
             return userService.existsByEmail(email) && expiration.getTime() > System.currentTimeMillis();
         } catch (Exception e) {
             return false;
         }
+    }
+
+    public Long getUserId(String token){
+        String email = Jwts.parser()
+                .setSigningKey(SECRET.getBytes())
+                .parseClaimsJws(token)
+                .getBody()
+                .getSubject();
+        return userService.findByEmail(email).getId();
     }
 }

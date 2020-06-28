@@ -1,9 +1,7 @@
 package com.rigby.jazzit.controller;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.rigby.jazzit.config.exception.ForbiddenException;
 import com.rigby.jazzit.domain.User;
-import com.rigby.jazzit.domain.request.ContactRequest;
 import com.rigby.jazzit.domain.request.LoginRequest;
 import com.rigby.jazzit.domain.response.LoginResponse;
 import com.rigby.jazzit.security.SecurityIgnore;
@@ -59,14 +57,12 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.OK).body(userService.findContactsById(userId));
     }
 
-    @PostMapping("/api/users/{userId}/contact")
-    public ResponseEntity<Void> postContact(
+    @PostMapping("/api/users/{userId}/contacts")
+    public ResponseEntity<Void> postContacts(
             @PathVariable Long userId,
             @Email @RequestParam String email
     ) {
         userService.createContact(userId, email);
         return ResponseEntity.status(HttpStatus.CREATED).body(null);
     }
-
-
 }

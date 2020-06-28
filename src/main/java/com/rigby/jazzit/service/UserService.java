@@ -2,12 +2,12 @@ package com.rigby.jazzit.service;
 
 import com.rigby.jazzit.config.exception.BadRequestException;
 import com.rigby.jazzit.config.exception.NotFoundException;
-import com.rigby.jazzit.config.exception.UnauthorizedException;
 import com.rigby.jazzit.domain.User;
 import com.rigby.jazzit.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.net.ssl.SSLSession;
 import java.util.List;
 
 @Service
@@ -25,9 +25,8 @@ public class UserService {
 
     public User login(String email, String password) {
         if (!userRepository.existsByEmailAndPassword(email, password)) {
-            throw new UnauthorizedException("Incorrect email or password");
+            throw new BadRequestException("Incorrect email or password");
         }
-
         return userRepository.findByEmail(email);
     }
 
@@ -52,7 +51,10 @@ public class UserService {
     }
 
     public User findById(Long id) {
-        return userRepository.getOne(id);
+        if (!userRepository.existsById(id)) {
+            throw new NotFoundException();
+        }
+        return userRepository.findById(id).get();
     }
 
     public boolean existsById(Long id) {
@@ -61,5 +63,9 @@ public class UserService {
 
     public boolean existsByEmail(String email) {
         return userRepository.existsByEmail(email);
+    }
+
+    public User findByEmail(String email) {
+        return userRepository.findByEmail(email);
     }
 }
