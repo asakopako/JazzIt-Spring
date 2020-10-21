@@ -1,17 +1,12 @@
 package com.rigby.jazzit.service.tool;
 
-import com.rigby.jazzit.config.exception.UnauthorizedException;
 import com.rigby.jazzit.service.UserService;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.springframework.web.context.request.RequestContextHolder;
-import org.springframework.web.context.request.ServletRequestAttributes;
 
-import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
-import java.util.regex.Matcher;
 
 @Component
 public class JwtTool {

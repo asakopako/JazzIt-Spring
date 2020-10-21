@@ -22,7 +22,6 @@ public class UserController {
 
     @Autowired private UserService userService;
 
-
     @SecurityIgnore
     @PostMapping("/api/users/register")
     public ResponseEntity<Void> postRegister(@Valid @RequestBody User user) {
@@ -41,7 +40,7 @@ public class UserController {
         loginResponse.setEmail(user.getEmail());
         loginResponse.setBirthday(user.getBirthday());
         loginResponse.setToken(JwtTool.createToken(user.getEmail()));
-        
+
         return ResponseEntity.status(HttpStatus.OK).body(loginResponse);
     }
 
@@ -51,9 +50,7 @@ public class UserController {
     }
 
     @GetMapping("/api/users/{userId}/contacts")
-    public ResponseEntity<List<User>> getContacts(
-            @PathVariable Long userId
-    ) {
+    public ResponseEntity<List<User>> getContacts(@PathVariable Long userId) {
         return ResponseEntity.status(HttpStatus.OK).body(userService.findContactsById(userId));
     }
 

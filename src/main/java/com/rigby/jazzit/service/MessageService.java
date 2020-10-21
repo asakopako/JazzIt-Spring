@@ -2,6 +2,7 @@ package com.rigby.jazzit.service;
 
 import com.rigby.jazzit.config.exception.BadRequestException;
 import com.rigby.jazzit.config.exception.NotFoundException;
+import com.rigby.jazzit.config.exception.UnauthorizedException;
 import com.rigby.jazzit.domain.Message;
 import com.rigby.jazzit.repository.MessageRepository;
 import com.rigby.jazzit.security.SecurityAspect;
@@ -26,7 +27,7 @@ public class MessageService {
             throw new NotFoundException("Sender or receiver doesn't exist");
         }
 
-        if (senderId.longValue() != securityAspect.getUserId().longValue()){
+        if (senderId.longValue() != securityAspect.getUserId().longValue()) {
             throw new BadRequestException();
         }
 
@@ -46,6 +47,12 @@ public class MessageService {
         if (!userService.existsById(senderId) || !userService.existsById(receiverId)) {
             throw new NotFoundException("Sender or receiver doesn't exist");
         }
+
+        // Cuando un usuario solicita los datos de otro usuario
+        if (senderId.longValue() != securityAspect.getUserId().longValue()) {
+            throw new UnauthorizedException("Invalid operation"); // o BadRequestException
+        }
+
         return messageRepository.findBySender_IdAndReceiver_Id(senderId, receiverId);
     }
 }

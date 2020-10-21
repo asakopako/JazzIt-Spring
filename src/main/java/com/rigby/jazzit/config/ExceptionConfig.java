@@ -4,16 +4,13 @@ import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import com.rigby.jazzit.config.exception.BadRequestException;
 import com.rigby.jazzit.config.exception.NotFoundException;
 import com.rigby.jazzit.config.exception.UnauthorizedException;
-import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.List;
 
 @ControllerAdvice(annotations = RestController.class)
 public class ExceptionConfig {
@@ -35,14 +32,8 @@ public class ExceptionConfig {
 
     @ExceptionHandler({MethodArgumentNotValidException.class, InvalidFormatException.class})
     public ResponseEntity<?> invalidFormatException(Exception e) {
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Error al rellenar el formulario");
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid formatted values entered");
     }
-
-//    @ExceptionHandler(InvalidFormatException.class)
-//    public ResponseEntity<?> invalidFormatException(Exception e) {
-//        String field = "BUSCAR EL NOMBRE DEPURANDO la excepcion"; // todo buscarlo
-//        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Field " + field + " error: " + e.getCause().getCause().getMessage());
-//    }
 
 //    @ExceptionHandler(MethodArgumentNotValidException.class)
 //    public ResponseEntity<?> methodArgumentNotValidException(Exception e) {

@@ -4,10 +4,10 @@ import com.rigby.jazzit.config.exception.BadRequestException;
 import com.rigby.jazzit.config.exception.NotFoundException;
 import com.rigby.jazzit.domain.User;
 import com.rigby.jazzit.repository.UserRepository;
+import org.mindrot.jbcrypt.BCrypt;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.net.ssl.SSLSession;
 import java.util.List;
 
 @Service
@@ -20,20 +20,26 @@ public class UserService {
         if (userRepository.existsByEmail(user.getEmail())) {
             throw new BadRequestException("Email already exists");
         }
+        user.setPassword(BCrypt.hashpw(user.getPassword(), BCrypt.gensalt()));
         userRepository.save(user);
     }
 
     public User login(String email, String password) {
-        if (!userRepository.existsByEmailAndPassword(email, password)) {
-            throw new BadRequestException("Incorrect email or password");
-        }
-        return userRepository.findByEmail(email);
+        if(!userRepository.existsByEmail(email))
+            throw new BadRequestException("Invalid credentials");
+
+        User user = userRepository.findByEmail(email);
+
+        if (!BCrypt.checkpw(password, user.getPassword()))
+            throw new BadRequestException("Invalid credentials");
+
+        return user;
     }
 
     public List<User> findContactsById(Long id) {
-        if(!userRepository.existsById(id)) {
+        if(!userRepository.existsById(id))
             throw new NotFoundException("User id doesn't exist");
-        }
+
         return userRepository.getOne(id).getContacts();
     }
 
