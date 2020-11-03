@@ -22,7 +22,7 @@ public class User {
     private String email;
 
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)      // este campo es ignorado al devolver la respuesta
-    @NotNull @NotEmpty @NotBlank @Size(min = 4)
+    @NotBlank @Size(min = 4)
     private String password;
 
     @Past // "1986-07-11"
