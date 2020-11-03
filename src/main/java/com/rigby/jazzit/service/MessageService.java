@@ -1,6 +1,7 @@
 package com.rigby.jazzit.service;
 
 import com.rigby.jazzit.config.exception.BadRequestException;
+import com.rigby.jazzit.config.exception.ForbiddenException;
 import com.rigby.jazzit.config.exception.NotFoundException;
 import com.rigby.jazzit.config.exception.UnauthorizedException;
 import com.rigby.jazzit.domain.Message;
@@ -50,7 +51,7 @@ public class MessageService {
 
         // Cuando un usuario solicita los datos de otro usuario
         if (senderId.longValue() != securityAspect.getUserId().longValue()) {
-            throw new UnauthorizedException("Invalid operation"); // o BadRequestException
+            throw new ForbiddenException("Invalid operation"); // o BadRequestException
         }
 
         return messageRepository.findBySender_IdAndReceiver_Id(senderId, receiverId);

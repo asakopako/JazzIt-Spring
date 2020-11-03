@@ -2,6 +2,7 @@ package com.rigby.jazzit.config;
 
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import com.rigby.jazzit.config.exception.BadRequestException;
+import com.rigby.jazzit.config.exception.ForbiddenException;
 import com.rigby.jazzit.config.exception.NotFoundException;
 import com.rigby.jazzit.config.exception.UnauthorizedException;
 import org.springframework.http.HttpStatus;
@@ -18,6 +19,11 @@ public class ExceptionConfig {
     @ExceptionHandler(UnauthorizedException.class)
     public ResponseEntity<?> unauthorizedException(Exception e) {
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(e.getMessage());
+    }
+
+    @ExceptionHandler(ForbiddenException.class)
+    public ResponseEntity<?> forbiddenException(Exception e) {
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(e.getMessage());
     }
 
     @ExceptionHandler(NotFoundException.class)

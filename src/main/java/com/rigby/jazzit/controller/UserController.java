@@ -22,6 +22,7 @@ public class UserController {
 
     @Autowired private UserService userService;
 
+
     @SecurityIgnore
     @PostMapping("/api/users/register")
     public ResponseEntity<Void> postRegister(@Valid @RequestBody User user) {
@@ -57,7 +58,7 @@ public class UserController {
     @PostMapping("/api/users/{userId}/contacts")
     public ResponseEntity<Void> postContacts(
             @PathVariable Long userId,
-            @Email @RequestParam String email
+            @Email @RequestBody String email
     ) {
         userService.createContact(userId, email);
         return ResponseEntity.status(HttpStatus.CREATED).body(null);

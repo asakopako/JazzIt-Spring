@@ -1,6 +1,7 @@
 package com.rigby.jazzit.controller;
 
 import com.rigby.jazzit.domain.Message;
+import com.rigby.jazzit.domain.request.MessageRequest;
 import com.rigby.jazzit.service.MessageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -18,10 +19,9 @@ public class MessageController {
     @PostMapping("/api/users/{userId}/messages")
     public ResponseEntity<Message> postMessage(
             @PathVariable Long userId,
-            @RequestParam Long receiverId,
-            @RequestParam String body
+            @RequestBody MessageRequest messageRequest
     ) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(messageService.create(userId, receiverId, body));
+        return ResponseEntity.status(HttpStatus.CREATED).body(messageService.create(userId, messageRequest.getReceiverId(), messageRequest.getBody()));
     }
 
     @GetMapping("/api/users/{userId}/messages")

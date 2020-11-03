@@ -10,15 +10,15 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-@Entity
 @Data
+@Entity
 public class User {
 
     @Id                                                         // primary key
     @GeneratedValue(strategy = GenerationType.IDENTITY)         // autoincrement
     private Long id;
 
-    @NotNull @NotEmpty @NotBlank @Email @Column(unique = true)
+    @NotBlank @Email @Column(unique = true)
     private String email;
 
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)      // este campo es ignorado al devolver la respuesta
