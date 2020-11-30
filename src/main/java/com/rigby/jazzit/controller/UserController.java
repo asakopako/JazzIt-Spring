@@ -39,7 +39,7 @@ public class UserController {
         LoginResponse loginResponse = new LoginResponse();
         loginResponse.setId(user.getId());
         loginResponse.setEmail(user.getEmail());
-        loginResponse.setBirthday(user.getBirthday());
+        loginResponse.setName(user.getName());
         loginResponse.setToken(JwtTool.createToken(user.getEmail()));
 
         return ResponseEntity.status(HttpStatus.OK).body(loginResponse);

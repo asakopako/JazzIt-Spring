@@ -25,8 +25,7 @@ public class User {
     @NotBlank @Size(min = 4)
     private String password;
 
-    @Past // "1986-07-11"
-    private LocalDate birthday;
+    private String name;
 
     @JsonIgnore
     @ManyToMany
