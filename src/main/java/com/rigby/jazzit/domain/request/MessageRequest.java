@@ -9,7 +9,7 @@ import javax.validation.constraints.NotNull;
 public class MessageRequest {
 
     @NotNull
-    private Long receiverId;
+    private Long contactId;
 
     @NotBlank
     private String body;
