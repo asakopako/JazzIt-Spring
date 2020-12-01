@@ -12,7 +12,9 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.time.ZonedDateTime;
+import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -44,16 +46,18 @@ public class MessageService {
         return message;
     }
 
-    public List<Message> findByReceiverId(Long senderId, Long receiverId) {
-        if (!userService.existsById(senderId) || !userService.existsById(receiverId)) {
+    public List<Message> findByReceiverId(Long userId, Long contactId) {
+        if (!userService.existsById(userId) || !userService.existsById(contactId)) {
             throw new NotFoundException("Sender or receiver doesn't exist");
         }
 
         // Cuando un usuario solicita los datos de otro usuario
-        if (senderId.longValue() != securityAspect.getUserId().longValue()) {
+        if (userId.longValue() != securityAspect.getUserId().longValue()) {
             throw new ForbiddenException("Invalid operation"); // o BadRequestException
         }
 
-        return messageRepository.findBySender_IdAndReceiver_Id(senderId, receiverId);
+        List<Message> messages = messageRepository.findBySender_IdAndReceiver_Id(userId, contactId);
+        messages.addAll(messageRepository.findBySender_IdAndReceiver_Id(contactId, userId));
+        return messages.stream().sorted(Comparator.comparing(Message::getCreatedAt)).collect(Collectors.toList());
     }
 }

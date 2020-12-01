@@ -27,9 +27,9 @@ public class MessageController {
     @GetMapping("/api/users/{userId}/messages")
     public ResponseEntity<List<Message>> getMessages(
             @PathVariable Long userId,
-            @RequestParam Long receiverId
+            @RequestParam Long contactId
     ) {
-        return ResponseEntity.status(HttpStatus.OK).body(messageService.findByReceiverId(userId, receiverId));
+        return ResponseEntity.status(HttpStatus.OK).body(messageService.findByReceiverId(userId, contactId));
     }
 
 }
