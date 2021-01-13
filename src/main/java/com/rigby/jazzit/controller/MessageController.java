@@ -21,7 +21,8 @@ public class MessageController {
             @PathVariable Long userId,
             @RequestBody MessageRequest messageRequest
     ) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(messageService.create(userId, messageRequest.getContactId(), messageRequest.getBody()));
+        messageService.create(userId, messageRequest.getContactId(), messageRequest.getBody());
+        return ResponseEntity.status(HttpStatus.CREATED).body(null);
     }
 
     @GetMapping("/api/users/{userId}/messages")

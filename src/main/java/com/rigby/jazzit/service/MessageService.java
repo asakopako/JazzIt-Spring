@@ -3,7 +3,6 @@ package com.rigby.jazzit.service;
 import com.rigby.jazzit.config.exception.BadRequestException;
 import com.rigby.jazzit.config.exception.ForbiddenException;
 import com.rigby.jazzit.config.exception.NotFoundException;
-import com.rigby.jazzit.config.exception.UnauthorizedException;
 import com.rigby.jazzit.domain.Message;
 import com.rigby.jazzit.repository.MessageRepository;
 import com.rigby.jazzit.security.SecurityAspect;

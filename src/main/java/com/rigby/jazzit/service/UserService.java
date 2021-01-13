@@ -4,16 +4,19 @@ import com.rigby.jazzit.config.exception.BadRequestException;
 import com.rigby.jazzit.config.exception.NotFoundException;
 import com.rigby.jazzit.domain.User;
 import com.rigby.jazzit.repository.UserRepository;
+import com.rigby.jazzit.security.SecurityAspect;
 import org.mindrot.jbcrypt.BCrypt;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class UserService {
 
     @Autowired private UserRepository userRepository;
+    @Autowired private SecurityAspect securityAspect;
 
 
     public void register(User user) {
@@ -47,13 +50,20 @@ public class UserService {
         if(!userRepository.existsById(userId) || !userRepository.existsByEmail(email)) {
             throw new NotFoundException("User id or email doesn't exist");
         }
+
+        List<User> userIdContacts = userRepository.getOne(userId).getContacts();
+
+        if(!userIdContacts.stream().filter(u -> u.getEmail().equals(email)).collect(Collectors.toList()).isEmpty()) {
+            throw new BadRequestException("Contact already added");
+        }
+
         User user = userRepository.getOne(userId);
         user.addContact(userRepository.findByEmail(email));
         userRepository.save(user);
     }
 
-    public List<User> findAll() {
-        return userRepository.findAll();
+    public List<User> findAllLessThis() {
+        return userRepository.findAll().stream().filter(u -> !u.getId().equals(securityAspect.getUserId())).collect(Collectors.toList());
     }
 
     public User findById(Long id) {

@@ -2,6 +2,7 @@ package com.rigby.jazzit.controller;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.rigby.jazzit.domain.User;
+import com.rigby.jazzit.domain.request.ContactRequest;
 import com.rigby.jazzit.domain.request.LoginRequest;
 import com.rigby.jazzit.domain.response.LoginResponse;
 import com.rigby.jazzit.security.SecurityIgnore;
@@ -13,7 +14,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import javax.validation.constraints.Email;
 import java.util.List;
 
 @RestController
@@ -47,7 +47,7 @@ public class UserController {
 
     @GetMapping("/api/users")
     public ResponseEntity<List<User>> getUsers() {
-        return ResponseEntity.status(HttpStatus.OK).body(userService.findAll());
+        return ResponseEntity.status(HttpStatus.OK).body(userService.findAllLessThis());
     }
 
     @GetMapping("/api/users/{userId}/contacts")
@@ -58,9 +58,9 @@ public class UserController {
     @PostMapping("/api/users/{userId}/contacts")
     public ResponseEntity<Void> postContacts(
             @PathVariable Long userId,
-            @Email @RequestBody String email
+            @Valid @RequestBody ContactRequest contactRequest
     ) {
-        userService.createContact(userId, email);
+        userService.createContact(userId, contactRequest.getEmail());
         return ResponseEntity.status(HttpStatus.CREATED).body(null);
     }
 }
